@@ -1,0 +1,65 @@
+/* programa_lista_01.c */
+#include <stdio.h>
+#include <stdlib.h>
+
+struct LISTA {
+    char string[41];
+    int numero;
+    struct LISTA * NEXT;
+};
+
+int main(void) {
+    int i;
+    struct LISTA *lista;
+    struct LISTA *inicio;
+    lista = calloc(1,sizeof(struct LISTA));
+    if( lista == NULL )
+{
+    printf("\nErro de alocacao de memoria!");
+    exit(-1);
+}
+
+lista->NEXT = NULL;
+
+/* guardando o início da lista */
+inicio = lista;
+
+for(i=0;i<25;i++)
+{
+
+    lista->numero = i;
+    sprintf(lista->string, "Numero %02d", i);
+
+/* aloca o próximo elemento da lista */
+    lista->NEXT = calloc(1,sizeof(struct LISTA));
+    if( lista->NEXT == NULL )
+{
+    printf("\nErro de alocacao de memoria!");
+    exit(-1);
+}
+
+/* posiciona no próximo elemento */
+    lista = lista->NEXT;
+    lista->NEXT = NULL;
+}
+/* volta para o início da lista */
+    lista = inicio;
+    while(lista->NEXT != NULL )
+{
+    printf("\nNumero = %d, String = %s", lista->numero, lista->string);
+/* caminha elemento a elemento da lista */
+    lista = lista->NEXT;
+}
+    lista = inicio;
+    while( lista->NEXT != NULL )
+{
+    struct LISTA *next; /* mantém referência do próximo elemento */
+    next = lista->NEXT;
+/* libera o espaço do endereço atual e “limpa” o endereço
+atribuindo NULL */
+    free(lista);
+    lista = NULL;
+    lista = next;
+}
+    return 0;
+}
